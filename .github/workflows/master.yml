@@ -1,24 +1,28 @@
-name: CI
-on:
-push:
-branches: master
-jobs:
-build:
-runs-on: ubuntu-latest
-strategy:
-matrix:
-node-version: [16.x]
-steps:
-- uses: actions/checkout@v2
-- run: npm install express
-- run: npm install pm2
-- name: rsync deployments
-uses: burnett01/rsync-deployments@5.1
-with:
-switches: -avzr --delete
-path: ./*
-remote_path: /var/www/node-app/
-remote_host: 3.89.252.19
-remote_user: ubuntu
-remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+ name: CI
+
+ on:
+   push:
+     branches: master
+ jobs:
+   build:
+     runs-on: ubuntu-latest
+
+     strategy:
+       matrix:
+         node-version: [16.x]
+
+     steps:
+       - uses: actions/checkout@v2
+       - run: npm install express
+
+  
+       - name: rsync deployments
+         uses: burnett01/rsync-deployments@5.1
+         with:
+           switches: -avzr --delete
+           path: ./*
+           remote_path: /var/www/node-app/
+           remote_host: 3.89.252.19
+           remote_user: ubuntu
+           remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
 
